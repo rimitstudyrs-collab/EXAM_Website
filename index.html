@@ -1,0 +1,531 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSC Exam Hub — Online HSC MCQ Exams</title>
+    <meta name="theme-color" content="#070B14">
+    
+    <!-- Fonts & Tailwind CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#070B14',
+                        cardBg: '#0F172A',
+                        primary: '#6366F1',
+                        primaryHover: '#4F46E5',
+                        liveRed: '#EF4444',
+                        mutedText: '#94A3B8'
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Hind Siliguri', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 2s infinite',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 15px rgba(239, 68, 68, 0.4)', borderColor: '#EF4444' },
+                            '50%': { boxShadow: '0 0 30px rgba(239, 68, 68, 0.8)', borderColor: '#F87171' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #070B14;
+            color: #F8FAFC;
+            font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-3px);
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #070B14; }
+        ::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- NAVIGATION BAR -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateTo('home')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-purple-600 flex items-center justify-center font-bold text-xl text-white shadow-lg shadow-primary/30">
+                        ⚡
+                    </div>
+                    <div>
+                        <span class="text-xl font-extrabold tracking-tight text-white block leading-none">HSC EXAM <span class="text-primary">HUB</span></span>
+                        <span class="text-[10px] text-mutedText font-medium tracking-wider">SCIENCE & GENERAL</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Links -->
+                <nav class="hidden md:flex items-center space-x-2">
+                    <button onclick="navigateTo('home')" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-mutedText hover:text-white hover:bg-white/5 transition flex items-center gap-2"><i data-lucide="home" class="w-4 h-4"></i> Home</button>
+                    <button onclick="navigateTo('exams')" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-mutedText hover:text-white hover:bg-white/5 transition flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4"></i> Exams</button>
+                    <button onclick="navigateTo('subjects')" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-mutedText hover:text-white hover:bg-white/5 transition flex items-center gap-2"><i data-lucide="book-open" class="w-4 h-4"></i> Subjects</button>
+                    <button onclick="navigateTo('schedule')" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-mutedText hover:text-white hover:bg-white/5 transition flex items-center gap-2"><i data-lucide="calendar" class="w-4 h-4"></i> Schedule</button>
+                </nav>
+
+                <!-- Mobile Menu Icon -->
+                <div class="flex md:hidden items-center">
+                    <button onclick="toggleMobileMenu()" class="p-2 text-slate-300 rounded-lg hover:bg-white/5">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-slate-800 bg-slate-950 px-4 py-2 space-y-1">
+            <button onclick="navigateTo('home')" class="w-full text-left px-3 py-2.5 rounded-lg text-base font-medium text-white hover:bg-slate-800 flex items-center gap-3"><i data-lucide="home" class="w-5 h-5"></i> Home</button>
+            <button onclick="navigateTo('exams')" class="w-full text-left px-3 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:bg-slate-800 flex items-center gap-3"><i data-lucide="file-text" class="w-5 h-5"></i> All Exams</button>
+            <button onclick="navigateTo('subjects')" class="w-full text-left px-3 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:bg-slate-800 flex items-center gap-3"><i data-lucide="book-open" class="w-5 h-5"></i> Subjects</button>
+            <button onclick="navigateTo('schedule')" class="w-full text-left px-3 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:bg-slate-800 flex items-center gap-3"><i data-lucide="calendar" class="w-5 h-5"></i> Exam Schedule</button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main id="mainContent" class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6"></main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 border-t border-slate-900 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-mutedText">
+            <p>©                 HSC EXAM HUB. Built for HSC Aspirants.</p>
+            <p class="font-medium mt-2">Developed By <span class="font-bold" style="background: linear-gradient(135deg, #F59E0B, #B45309); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">RIMIT</span></p>
+        </div>
+    </footer>
+
+    <!-- JS LOGIC & DATABASE -->
+    <script>
+        /* ==========================================================================
+           1. FULL HSC CHAPTER DATABASE (PRE-FILLED, NO NEED TO EDIT THIS)
+           ========================================================================== */
+        const subjectsData = {
+            physics1: { id: "physics1", name: "Physics 1st Paper", icon: "⚛️", chapters: ["ভৌত জগৎ ও পরিমাপ", "ভেক্টর", "গতিবিদ্যা", "নিউটনিয়ান বলবিদ্যা", "কাজ, শক্তি ও ক্ষমতা", "মহাকর্ষ ও অভিকর্ষ", "পদার্থের গাঠনিক ধর্ম", "পর্যায়বৃত্ত গতি", "তরঙ্গ", "আদর্শ গ্যাস ও গ্যাসের গতিতত্ত্ব"] },
+            physics2: { id: "physics2", name: "Physics 2nd Paper", icon: "🧲", chapters: ["তাপগতিবিদ্যা", "স্থির তড়িৎ", "চল তড়িৎ", "তড়িৎ প্রবাহের চৌম্বক ক্রিয়া ও চুম্বকত্ব", "তাড়িতচৌম্বক আবেশ ও পরিবর্তী প্রবাহ", "জ্যামিতিক আলোকবিজ্ঞান", "ভৌত আলোকবিজ্ঞান", "আধুনিক পদার্থবিজ্ঞানের সূচনা", "পরমাণুর মডেল ও নিউক্লিয়ার পদার্থবিজ্ঞান", "সেমিকন্ডাক্টর ও ইলেকট্রনিক্স", "জ্যোতির্বিজ্ঞান"] },
+            chemistry1: { id: "chemistry1", name: "Chemistry 1st Paper", icon: "🧪", chapters: ["ল্যাবরেটরির নিরাপদ ব্যবহার", "গুণগত রসায়ন", "মৌলের পর্যায়বৃত্ত ধর্ম ও রাসায়নিক বন্ধন", "রাসায়নিক পরিবর্তন", "কর্মমুখী রসায়ন"] },
+            chemistry2: { id: "chemistry2", name: "Chemistry 2nd Paper", icon: "⚗️", chapters: ["পরিবেশ রসায়ন", "জৈব রসায়ন", "পরিমাণগত রসায়ন", "তড়িৎ রসায়ন", "অর্থনৈতিক রসায়ন"] },
+            math1: { id: "math1", name: "Higher Math 1st Paper", icon: "📐", chapters: ["ম্যাট্রিক্স ও নির্ণায়ক", "ভেক্টর", "সরলরেখা", "বৃত্ত", "বিন্যাস ও সমাবেশ", "ত্রিকোণমিতিক অনুপাত", "সংযুক্ত কোণের ত্রিকোণমিতিক অনুপাত", "ফাংশন ও ফাংশনের লেখচিত্র", "অন্তরীকরণ", "যোগজীকরণ"] },
+            math2: { id: "math2", name: "Higher Math 2nd Paper", icon: "📊", chapters: ["বাস্তব সংখ্যা ও অসমতা", "যোগাশ্রয়ী প্রোগ্রাম", "জটিল সংখ্যা", "বহুপদী ও বহুপদী সমীকরণ", "দ্বিপদী বিস্তৃতি", "কনিক", "বিপরীত ত্রিকোণমিতিক ফাংশন ও সমীকরণ", "স্থিতিবিদ্যা", "সমতলে বস্তুকণার গতি", "বিস্তার পরিমাপ ও সম্ভাবনা"] },
+            biology1: { id: "biology1", name: "Biology 1st Paper", icon: "🌿", chapters: ["কোষ ও এর গঠন", "কোষ বিভাজন", "কোষ রসায়ন", "অণুজীব", "শৈবাল ও ছত্রাক", "ব্রায়োফাইটা ও টেরিডোফাইটা", "নগ্নবীজী ও আবৃতবীজী উদ্ভিদ", "টিস্যু ও টিস্যুতন্ত্র", "উদ্ভিদ শারীরতত্ত্ব", "উদ্ভিদ প্রজনন", "জীবপ্রযুক্তি", "জীবের পরিবেশ ও বিস্তার"] },
+            biology2: { id: "biology2", name: "Biology 2nd Paper", icon: "🧬", chapters: ["প্রাণীর বিভিন্নতা ও শ্রেণিবিন্যাস", "প্রাণীর পরিচিতি", "মানব শারীরতত্ত্ব: পরিপাক ও শোষণ", "রক্ত ও সঞ্চালন", "শসন ও শ্বাসক্রিয়া", "বর্জ্য ও নিষ্কাশন", "চলন ও অঙ্গচালনা", "স্নায়বিক সমন্বয়", "রাসায়নিক সমন্বয়", "মানব প্রজনন", "জিনতত্ত্ব ও বিবর্তন", "প্রাণীর আচরণ"] },
+            bangla1: { id: "bangla1", name: "বাংলা ১ম পত্র", icon: "📖", chapters: ["গদ্য", "কবিতা", "উপন্যাস (লালসালু)", "নাটক (সিরাজউদ্দৌলা)"] },
+            bangla2: { id: "bangla2", name: "বাংলা ২য় পত্র", icon: "✍️", chapters: ["বাংলা উচ্চারণের নিয়ম", "বাংলা বানানের নিয়ম", "বাংলা ভাষার ব্যাকরণিক শব্দশ্রেণি", "বাংলা শব্দ গঠন", "বাক্যতত্ত্ব", "বাংলা ভাষার অপপ্রয়োগ ও শুদ্ধ প্রয়োগ", "পারিভাষিক শব্দ ও অনুবাদ", "দিনলিপি/প্রতিবেদন", "বৈদ্যুতিন চিঠি/খুদে বার্তা", "সারাংশ/ভাবসম্প্রসারণ", "সংলাপ/খুদে গল্প", "প্রবন্ধ রচনা"] },
+            english1: { id: "english1", name: "English 1st Paper", icon: "🔤", chapters: ["Comprehension", "Flowchart/Information Transfer", "Summary Writing", "Cloze Test With Clues", "Cloze Test Without Clues", "Rearranging", "Graph & Chart", "Story Writing", "Informal Letter/Email", "Appreciating Short Stories/Poems"] },
+            english2: { id: "english2", name: "English 2nd Paper", icon: "📝", chapters: ["Prepositions", "Special Uses of Words/Phrases", "Completing Sentences", "Right Form of Verbs", "Narrative Style (Narration)", "Modifiers", "Sentence Connectors", "Synonyms and Antonyms", "Punctuation", "Formal Letter/Application", "Report Writing", "Paragraph Writing", "Composition"] },
+            ict: { id: "ict", name: "ICT", icon: "💻", chapters: ["বিশ্ব ও বাংলাদেশ প্রেক্ষিত", "কমিউনিকেশন সিস্টেমস ও নেটওয়ার্কিং", "সংখ্যা পদ্ধতি ও ডিজিটাল ডিভাইস", "ওয়েব ডিজাইন পরিচিতি এবং এইচটিএমএল", "প্রোগ্রামিং ভাষা", "ডেটাবেজ ম্যানেজমেন্ট সিস্টেম"] }
+        };
+
+        /* ==========================================================================
+           2. EXAMS DATABASE (ADD YOUR LINKS & TIMES HERE)
+           ========================================================================== */
+        const examsData = [
+    
+     {
+id: "biology2-ch1-001", // Jekono ekta unique ID din
+title: "Chapter:1-Animal Diversity and Classification MCQ", // Exam er nam
+subject: "Biology 2nd Paper", // Subject er nam
+subjectId: "biology2", // ID ta subjectsData theke milate hobe
+chapter: "প্রাণীর বিভিন্নতা ও শ্রেণিবিন্যাস", // Exact chapter er nam
+examUrl: "https://rimitprofessionalrp-ship-it.github.io/Zoology_1_Rudra_XM/", // Ekhane apnar tracker or exam link diben
+startTime: "2026-08-20T22:00:00+06:00", // Start Time (Upcoming)
+endTime: "2026-08-20T23:00:00+06:00", // End Time
+duration: 25,
+totalQuestions: 30
+},
+    
+    
+    
+            {
+                id: "phys1-ch8-001",
+                title: "Periodic Motion MCQ Exam",
+                subject: "Physics 1st Paper",
+                subjectId: "physics1",
+                chapter: "পর্যায়বৃত্ত গতি",
+                examUrl: "https://rimitstudyrs-collab.github.io/Periodic_Motion/",
+                startTime: "2026-08-24T22:00:00+06:00", // 24 Aug, 10:00 PM
+                endTime: "2026-08-24T23:00:00+06:00",   // 24 Aug, 11:00 PM
+                duration: 30,
+                totalQuestions: 30
+            },
+            {
+                id: "phys1-ch2-001",
+                title: "Vector MCQ Exam",
+                subject: "Physics 1st Paper",
+                subjectId: "physics1",
+                chapter: "ভেক্টর",
+                examUrl: "https://rimitstudyrs-collab.github.io/Vector_Exam/",
+                startTime: "2026-08-28T22:00:00+06:00", // 28 Aug, 10:00 PM
+                endTime: "2026-08-28T23:00:00+06:00",   // 28 Aug, 11:00 PM
+                duration: 25,
+                totalQuestions: 30
+            },
+    {
+            id: "phys2-ch1-001",
+                title: "Thermodynamic MCQ Exam",
+                subject: "Physics 2nd Paper",
+                subjectId: "physics2",
+                chapter: "তাপগতিবিদ্যা",
+                examUrl: "https://rimitstudyrs-collab.github.io/Exam-Thermodynamic//",
+                startTime: "2026-09-04T22:00:00+06:00",
+                endTime: "2026-09-04T23:00:00+06:00",   
+                duration: 30,
+                totalQuestions: 30
+            }
+            // Notun exam add korte ekhane arekta {} block toiri korben
+        ];
+
+        /* ==========================================================================
+           3. APPLICATION LOGIC & STATUS CALCULATOR
+           ========================================================================== */
+        let currentView = 'home';
+        let timerInterval = null;
+        let lastKnownStatuses = {};
+
+        function getExamStatus(exam) {
+            const now = new Date();
+            const start = new Date(exam.startTime);
+            const end = new Date(exam.endTime);
+            if (now < start) return "UPCOMING";
+            if (now >= start && now <= end) return "LIVE";
+            return "ENDED";
+        }
+
+        // Time format tools
+        function formatBanglaDate(isoString) {
+            const date = new Date(isoString);
+            return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true });
+        }
+
+        function getCountdown(targetIso) {
+            const now = new Date().getTime();
+            const target = new Date(targetIso).getTime();
+            const diff = target - now;
+
+            if (diff <= 0) return { expired: true, text: "00h 00m 00s" };
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            let str = days > 0 ? `${days}d ` : "";
+            str += `${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m ${String(seconds).padStart(2, '0')}s`;
+            return { expired: false, text: str };
+        }
+
+        /* --- Navigation & Render System --- */
+        function navigateTo(view, param = null) {
+            currentView = view;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('mobileMenu').classList.add('hidden');
+            
+            refreshCurrentView(param);
+        }
+
+        function refreshCurrentView(param = null) {
+            const container = document.getElementById('mainContent');
+            if (currentView === 'home') renderHome(container);
+            else if (currentView === 'exams') renderExamsView(container);
+            else if (currentView === 'subjects') renderSubjectsView(container, param);
+            else if (currentView === 'schedule') renderScheduleView(container);
+            
+            lucide.createIcons();
+            startCountdownTimers();
+            updateLastStatuses();
+        }
+
+        /* --- View: HOMEPAGE --- */
+        function renderHome(container) {
+            const liveExams = examsData.filter(e => getExamStatus(e) === "LIVE");
+            const upcomingExams = examsData.filter(e => getExamStatus(e) === "UPCOMING");
+
+            container.innerHTML = `
+                <section class="text-center py-8 md:py-12">
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-4 leading-tight">
+                        Test Your Preparation.<br/>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-500">Ace Your HSC Exams.</span>
+                    </h1>
+                    <p class="text-slate-400 text-sm max-w-2xl mx-auto mb-8">
+                        HSC Science & General Subjects-এর অধ্যায়ভিত্তিক অনলাইন পরীক্ষা। নির্দিষ্ট সময়ে পরীক্ষায় অংশ নিয়ে নিজের প্রস্তুতি যাচাই করুন।
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button onclick="navigateTo('subjects')" class="px-6 py-3 rounded-xl bg-primary hover:bg-primaryHover text-white font-semibold text-sm shadow-lg shadow-primary/25 transition">
+                            📚 Browse All Chapters
+                        </button>
+                    </div>
+                </section>
+
+                <!-- 🔴 LIVE NOW -->
+                <section class="mb-12">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-liveRed animate-pulse"></span> 🔴 LIVE NOW
+                        </h2>
+                    </div>
+                    ${liveExams.length > 0 ? `
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            ${liveExams.map(ex => renderExamCard(ex)).join('')}
+                        </div>
+                    ` : `
+                        <div class="glass-panel p-6 rounded-2xl text-center border-slate-800">
+                            <p class="text-sm text-slate-400">এই মুহূর্তে কোনো পরীক্ষা লাইভ নেই। Upcoming এক্সাম তালিকা চেক করুন।</p>
+                        </div>
+                    `}
+                </section>
+
+                <!-- ⏳ UPCOMING -->
+                <section class="mb-12">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-white">⏳ UPCOMING EXAMS</h2>
+                    </div>
+                    ${upcomingExams.length > 0 ? `
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${upcomingExams.map(ex => renderExamCard(ex)).join('')}
+                        </div>
+                    ` : `
+                        <p class="text-sm text-slate-500 italic">No upcoming exams scheduled.</p>
+                    `}
+                </section>
+
+                <!-- 📚 QUICK SUBJECTS -->
+                <section class="mb-8">
+                    <h2 class="text-xl font-bold text-white mb-4">📚 ALL SUBJECTS</h2>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                        ${Object.values(subjectsData).map(subj => `
+                            <div onclick="navigateTo('subjects', '${subj.id}')" class="glass-card p-4 rounded-xl cursor-pointer flex items-center gap-3">
+                                <span class="text-2xl">${subj.icon}</span>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">${subj.name}</h4>
+                                    <span class="text-[10px] text-mutedText">${subj.chapters.length} Chapters</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+            `;
+        }
+
+        /* --- Exam Card Component --- */
+        function renderExamCard(exam) {
+            const status = getExamStatus(exam);
+            let badgeStyle = "bg-slate-800 text-slate-400";
+            let actionBtn = "";
+            let timerHtml = "";
+
+            if (status === "LIVE") {
+                badgeStyle = "bg-liveRed/20 text-liveRed border-liveRed/40 animate-pulse";
+                timerHtml = `<div class="mb-3 text-xs text-center font-mono text-liveRed font-semibold" data-countdown="${exam.endTime}">Ends in: Calculating...</div>`;
+                actionBtn = `<a href="${exam.examUrl}" target="_blank" class="w-full block text-center py-2.5 rounded-xl bg-liveRed text-white font-bold text-xs shadow-lg shadow-liveRed/30 hover:bg-red-600 transition">🚀 ENTER EXAM</a>`;
+            } else if (status === "UPCOMING") {
+                badgeStyle = "bg-indigo-500/20 text-indigo-400 border-indigo-500/40";
+                timerHtml = `<div class="mb-3 text-xs text-center font-mono text-indigo-400 font-semibold" data-countdown="${exam.startTime}">Starts in: Calculating...</div>`;
+                actionBtn = `<button disabled class="w-full py-2.5 rounded-xl bg-slate-800 text-slate-500 font-bold text-xs cursor-not-allowed">Starts Soon</button>`;
+            } else {
+                badgeStyle = "bg-slate-800 text-slate-400";
+                actionBtn = `<a href="${exam.examUrl}" target="_blank" class="w-full block text-center py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">Practice Mode</a>`;
+            }
+
+            return `
+                <div class="glass-card p-5 rounded-2xl flex flex-col justify-between ${status === 'LIVE' ? 'border-liveRed/50' : ''}">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="px-2 py-1 rounded text-[10px] font-bold border ${badgeStyle}">${status}</span>
+                            <span class="text-[11px] text-mutedText">${exam.subject}</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-1">${exam.title}</h3>
+                        <p class="text-xs text-indigo-400 mb-3">${exam.chapter}</p>
+                        <div class="text-[11px] text-slate-400 mb-4 bg-slate-900/50 p-2 rounded-lg">
+                            ${exam.totalQuestions} Questions • ${exam.duration} Minutes
+                        </div>
+                    </div>
+                    <div>
+                        ${timerHtml}
+                        ${actionBtn}
+                    </div>
+                </div>
+            `;
+        }
+
+        /* --- View: EXAMS DIRECTORY --- */
+        function renderExamsView(container) {
+            container.innerHTML = `
+                <h1 class="text-2xl font-bold text-white mb-6">All Exams Directory</h1>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    ${examsData.length > 0 ? examsData.map(ex => renderExamCard(ex)).join('') : '<p class="text-slate-400">কোনো পরীক্ষা যুক্ত করা হয়নি।</p>'}
+                </div>
+            `;
+        }
+
+        /* --- View: SUBJECTS & CHAPTERS --- */
+        function renderSubjectsView(container, activeSubjectId = null) {
+            const selectedSubjId = activeSubjectId || Object.keys(subjectsData)[0];
+            const currentSubj = subjectsData[selectedSubjId];
+
+            container.innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Left: Subject List -->
+                    <div class="space-y-2">
+                        <h2 class="text-lg font-bold text-white mb-3">Subjects</h2>
+                        <div class="space-y-1 max-h-[75vh] overflow-y-auto pr-2">
+                            ${Object.values(subjectsData).map(subj => `
+                                <button onclick="renderSubjectsView(document.getElementById('mainContent'), '${subj.id}')" class="w-full text-left p-3 rounded-xl transition flex items-center justify-between ${subj.id === selectedSubjId ? 'bg-primary text-white font-bold' : 'glass-panel text-slate-300 hover:bg-white/5'}">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-lg">${subj.icon}</span>
+                                        <span class="text-sm">${subj.name}</span>
+                                    </div>
+                                    <i data-lucide="chevron-right" class="w-4 h-4 opacity-70"></i>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Right: Chapters & Links -->
+                    <div class="lg:col-span-2 space-y-4">
+                        <div class="glass-panel p-5 rounded-2xl flex items-center gap-3 mb-2">
+                            <span class="text-3xl">${currentSubj.icon}</span>
+                            <div>
+                                <h1 class="text-2xl font-bold text-white">${currentSubj.name}</h1>
+                                <span class="text-xs text-mutedText">${currentSubj.chapters.length} Chapters in total</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            ${currentSubj.chapters.map((chapterName, idx) => {
+                                // Find if this chapter has an exam linked
+                                const chapterExams = examsData.filter(e => e.subjectId === selectedSubjId && e.chapter === chapterName);
+                                
+                                let examHtml = '';
+                                if(chapterExams.length > 0) {
+                                    examHtml = chapterExams.map(ex => {
+                                        const st = getExamStatus(ex);
+                                        const btnClass = st === "UPCOMING" ? "bg-slate-700 text-slate-400 cursor-not-allowed" : (st === "LIVE" ? "bg-liveRed hover:bg-red-600 text-white" : "bg-primary hover:bg-primaryHover text-white");
+                                        const btnText = st === "UPCOMING" ? "Upcoming" : (st === "LIVE" ? "Live Now" : "Practice Exam");
+                                        const btnTag = st === "UPCOMING" ? `<button disabled class="px-4 py-1.5 rounded-lg text-xs font-bold ${btnClass}">${btnText}</button>` : `<a href="${ex.examUrl}" target="_blank" class="px-4 py-1.5 rounded-lg text-xs font-bold ${btnClass} transition block text-center">${btnText}</a>`;
+                                        
+                                        return `
+                                            <div class="mt-3 p-3 bg-slate-900/80 border border-slate-800 rounded-lg flex flex-col sm:flex-row items-center justify-between gap-3">
+                                                <div>
+                                                    <span class="text-sm font-semibold text-white block">${ex.title}</span>
+                                                    <span class="text-[10px] text-indigo-400">${st !== 'ENDED' ? 'Starts/Started: ' + formatBanglaDate(ex.startTime) : 'Ended, available for practice'}</span>
+                                                </div>
+                                                <div>${btnTag}</div>
+                                            </div>
+                                        `;
+                                    }).join('');
+                                } else {
+                                    examHtml = `<div class="mt-2 text-[11px] text-slate-500 italic">No exam added yet.</div>`;
+                                }
+
+                                return `
+                                    <div class="glass-panel p-4 rounded-xl border-slate-800/60">
+                                        <h4 class="text-sm font-bold text-slate-200">
+                                            <span class="text-primary mr-2">${String(idx + 1).padStart(2, '0')}.</span>${chapterName}
+                                        </h4>
+                                        ${examHtml}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /* --- View: SCHEDULE --- */
+        function renderScheduleView(container) {
+            container.innerHTML = `
+                <h1 class="text-2xl font-bold text-white mb-6">📅 Exam Schedule</h1>
+                <div class="max-w-3xl space-y-4">
+                    ${examsData.length > 0 ? examsData.map(exam => {
+                        const st = getExamStatus(exam);
+                        return `
+                            <div class="glass-panel p-4 rounded-xl border border-slate-800 flex items-center justify-between">
+                                <div>
+                                    <h4 class="text-base font-bold text-white">${exam.title}</h4>
+                                    <p class="text-xs text-indigo-400 mb-1">${exam.subject} • ${exam.chapter}</p>
+                                    <p class="text-[11px] text-slate-400">Start: ${formatBanglaDate(exam.startTime)} | End: ${formatBanglaDate(exam.endTime)}</p>
+                                </div>
+                                <span class="px-3 py-1 rounded text-[10px] font-bold ${st === 'LIVE' ? 'bg-liveRed/20 text-liveRed' : (st === 'UPCOMING' ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 text-slate-400')}">
+                                    ${st}
+                                </span>
+                            </div>
+                        `;
+                    }).join('') : '<p class="text-slate-400">কোনো পরীক্ষা নির্ধারিত নেই।</p>'}
+                </div>
+            `;
+        }
+
+        /* --- Timer & Auto Refresh Logic --- */
+        function updateLastStatuses() {
+            examsData.forEach(ex => { lastKnownStatuses[ex.id] = getExamStatus(ex); });
+        }
+
+        function startCountdownTimers() {
+            if (timerInterval) clearInterval(timerInterval);
+
+            timerInterval = setInterval(() => {
+                // Update countdown texts
+                document.querySelectorAll('[data-countdown]').forEach(el => {
+                    const targetIso = el.getAttribute('data-countdown');
+                    const isLive = el.innerText.includes('Ends');
+                    const prefix = isLive ? 'Ends in: ' : 'Starts in: ';
+                    el.innerText = prefix + getCountdown(targetIso).text;
+                });
+
+                // Auto state change detector (UPCOMING -> LIVE -> ENDED)
+                let statusChanged = false;
+                examsData.forEach(ex => {
+                    const currentSt = getExamStatus(ex);
+                    if (lastKnownStatuses[ex.id] !== currentSt) {
+                        statusChanged = true;
+                    }
+                });
+
+                // If time crosses a boundary, automatically refresh the view
+                if (statusChanged) {
+                    refreshCurrentView();
+                }
+
+            }, 1000);
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        }
+
+        // Init
+        window.addEventListener('DOMContentLoaded', () => {
+            navigateTo('home');
+        });
+    </script>
+</body>
+</html>
